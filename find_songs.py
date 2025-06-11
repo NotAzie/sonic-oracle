@@ -17,9 +17,22 @@ def search_youtube(query, max_results=25):
         "maxResults": max_results,
         "key": API_KEY
     })
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-    with urllib.request.urlopen(req) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except Exception as e:
+        print(f"API Error: {e}")
+        return {"items": []}
+
+def get_video_snippet(item):
+    snippet = item.get("snippet", {})
+    return {
+        "id": item.get("id", {}).get("videoId", ""),
+        "title": snippet.get("title", ""),
+        "description": snippet.get("description", ""),
+        "channelTitle": snippet.get("channelTitle", "")
+    }
 
 if __name__ == "__main__":
     if not API_KEY:
@@ -29,5 +42,5 @@ if __name__ == "__main__":
     print(f"Searching: {q}")
     data = search_youtube(q)
     for item in data.get("items", []):
-        title = item["snippet"]["title"]
-        print("-", title)
+        v = get_video_snippet(item)
+        print(f"[{v['id']}] {v['title']} (by {v['channelTitle']})")
