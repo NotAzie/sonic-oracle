@@ -3,11 +3,21 @@ find_songs.py - Prototype script to discover viral songs on YouTube.
 """
 import os
 import sys
+import re
 import json
 import urllib.request
 import urllib.parse
 
 API_KEY = os.getenv("YOUTUBE_API_KEY", "")
+
+_ISO_DURATION = re.compile(r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?")
+
+def parse_duration(iso_str):
+    m = _ISO_DURATION.match(iso_str or "")
+    if not m:
+        return 0
+    h, mins, s = (int(x or 0) for x in m.groups())
+    return h * 3600 + mins * 60 + s
 
 def search_youtube(query, max_results=25):
     url = "https://www.googleapis.com/youtube/v3/search?" + urllib.parse.urlencode({
@@ -33,14 +43,3 @@ def get_video_snippet(item):
         "description": snippet.get("description", ""),
         "channelTitle": snippet.get("channelTitle", "")
     }
-
-if __name__ == "__main__":
-    if not API_KEY:
-        print("Please set YOUTUBE_API_KEY environment variable")
-        sys.exit(1)
-    q = "slowed reverb 2020"
-    print(f"Searching: {q}")
-    data = search_youtube(q)
-    for item in data.get("items", []):
-        v = get_video_snippet(item)
-        print(f"[{v['id']}] {v['title']} (by {v['channelTitle']})")
