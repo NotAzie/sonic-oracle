@@ -4,6 +4,7 @@ find_songs.py - Prototype script to discover viral songs on YouTube.
 import os
 import sys
 import re
+import csv
 import json
 import html
 import unicodedata
@@ -18,3 +19,11 @@ _REJECT_REGEX = re.compile(r"(" + "|".join(BLOCKLIST_WORDS) + r")", re.IGNOREC
 
 def is_compilation(title):
     return bool(_REJECT_REGEX.search(title))
+
+def export_csv(records, filename="songs.csv"):
+    with open(filename, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["Song", "Artist", "Frequency", "RawTitle"])
+        for r in records:
+            w.writerow([r.get("song"), r.get("artist"), r.get("freq", 1), r.get("title")])
+    print(f"Exported to {filename}")
