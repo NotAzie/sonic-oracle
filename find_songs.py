@@ -6,24 +6,17 @@ import sys
 import re
 import csv
 import json
-import html
-import unicodedata
 
-API_KEY = os.getenv("YOUTUBE_API_KEY", "")
+MAX_DURATION_SECONDS = 1200  # 20 minutes max (reject DJ sets / multi-hour playlists)
 
-BLOCKLIST_WORDS = [
-    r"top\s*\d+", r"best\s+songs?", r"playlist", r"compilation",
-    r"hits?\s+of", r"ranking", r"countdown", r"mashup"
-]
-_REJECT_REGEX = re.compile(r"(" + "|".join(BLOCKLIST_WORDS) + r")", re.IGNORECASE)
+_ISO_DURATION = re.compile(r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?")
 
-def is_compilation(title):
-    return bool(_REJECT_REGEX.search(title))
+def parse_duration(iso_str):
+    m = _ISO_DURATION.match(iso_str or "")
+    if not m:
+        return 0
+    h, mins, s = (int(x or 0) for x in m.groups())
+    return h * 3600 + mins * 60 + s
 
-def export_csv(records, filename="songs.csv"):
-    with open(filename, "w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
-        w.writerow(["Song", "Artist", "Frequency", "RawTitle"])
-        for r in records:
-            w.writerow([r.get("song"), r.get("artist"), r.get("freq", 1), r.get("title")])
-    print(f"Exported to {filename}")
+def is_duration_allowed(duration_seconds):
+    return 30 <= duration_seconds <= MAX_DURATION_SECONDS
