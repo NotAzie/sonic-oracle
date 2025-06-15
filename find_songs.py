@@ -1,11 +1,10 @@
 """
 find_songs.py - Prototype script to discover viral songs on YouTube.
 """
-import re
+# Allowed YouTube Category IDs: 10 (Music), 24 (Entertainment)
+ALLOWED_CATEGORIES = {"10", "24"}
 
-_REJECT_ARTIST = re.compile(r"^(best|top|new|official|audio|video|\d{4})$", re.IGNORECASE)
-
-def validate_artist(artist):
-    if not artist or _REJECT_ARTIST.match(artist.strip()):
-        return "Unknown"
-    return artist.strip()
+def is_valid_category(cat_id):
+    if not cat_id:
+        return True
+    return str(cat_id) in ALLOWED_CATEGORIES
