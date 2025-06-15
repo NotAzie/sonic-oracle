@@ -1,15 +1,9 @@
 """
 find_songs.py - Prototype script to discover viral songs on YouTube.
 """
-import os
-import sys
-import argparse
+from collections import Counter
 
-def process_results(items):
-    if not items:
-        print("[!] No candidate items returned for query. Skipping.")
-        return []
-    records = []
-    for it in items:
-        records.append(it)
-    return records
+def rank_by_frequency(song_list):
+    """Counts occurrences of (song, artist) pairs."""
+    counts = Counter(song_list)
+    return counts.most_common()
