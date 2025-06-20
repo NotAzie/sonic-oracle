@@ -1,10 +1,15 @@
 """
 find_songs.py - Prototype script to discover viral songs on YouTube.
 """
-# Allowed YouTube Category IDs: 10 (Music), 24 (Entertainment)
-ALLOWED_CATEGORIES = {"10", "24"}
+import time
+import urllib.error
 
-def is_valid_category(cat_id):
-    if not cat_id:
-        return True
-    return str(cat_id) in ALLOWED_CATEGORIES
+def fetch_with_retry(request_fn, max_retries=3, delay=2.0):
+    for attempt in range(max_retries):
+        try:
+            return request_fn()
+        except urllib.error.HTTPError as e:
+            if e.code in (500, 503, 429) and attempt < max_retries - 1:
+                time.sleep(delay * (2 ** attempt))
+            else:
+                raise
