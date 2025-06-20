@@ -1,13 +1,10 @@
 """
 find_songs.py - Prototype script to discover viral songs on YouTube.
 """
-import re
-import html
-import unicodedata
-
-def normalize_title_prototype(raw_title):
-    t = html.unescape(raw_title)
-    t = unicodedata.normalize("NFKD", t)
-    t = re.sub(r"[\(\[].*?[\)\]]", "", t)
-    t = t.replace("–", "-").replace("—", "-")
-    return t.strip()
+class SongEvidence:
+    def __init__(self, song, artist, video_id, channel_id, view_count):
+        self.song = song
+        self.artist = artist
+        self.video_id = video_id
+        self.channel_id = channel_id
+        self.view_count = view_count
