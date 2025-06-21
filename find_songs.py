@@ -1,7 +1,10 @@
 """
 find_songs.py - Prototype script to discover viral songs on YouTube.
 """
-from difflib import SequenceMatcher
+from collections import defaultdict
 
-def are_titles_similar(a, b, threshold=0.80):
-    return SequenceMatcher(None, a.lower(), b.lower()).ratio() >= threshold
+def aggregate_track_views(evidence_list):
+    views = defaultdict(int)
+    for ev in evidence_list:
+        views[ev.song] += ev.view_count
+    return dict(views)
