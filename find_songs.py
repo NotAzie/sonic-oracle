@@ -1,11 +1,7 @@
 """
 find_songs.py - Prototype script to discover viral songs on YouTube.
 """
-def deduplicate_video_ids(id_list):
-    seen = set()
-    unique = []
-    for vid in id_list:
-        if vid not in seen:
-            seen.add(vid)
-            unique.append(vid)
-    return unique
+from difflib import SequenceMatcher
+
+def are_titles_similar(a, b, threshold=0.80):
+    return SequenceMatcher(None, a.lower(), b.lower()).ratio() >= threshold
