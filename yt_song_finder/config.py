@@ -1,12 +1,13 @@
 """
 config.py - Configuration management for yt_song_finder.
 """
+import os
 from pathlib import Path
 from dataclasses import dataclass, field
 
 @dataclass
 class Config:
-    api_key: str | None = None
+    api_key: str | None = field(default_factory=lambda: os.getenv("YOUTUBE_API_KEY"))
     cache_dir: Path = Path("./cache")
     output_dir: Path = Path("./output")
 
