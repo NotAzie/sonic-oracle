@@ -1,7 +1,10 @@
 """
 discovery.py - Finds candidate single-song videos across categories.
 """
+import json
 import logging
+import urllib.request
+import urllib.parse
 from .config import Config
 
 logger = logging.getLogger(__name__)
@@ -9,6 +12,10 @@ logger = logging.getLogger(__name__)
 class VideoDiscovery:
     def __init__(self, config: Config):
         self.config = config
+
+    def chunk_list(self, lst: list, size: int):
+        for i in range(0, len(lst), size):
+            yield lst[i:i + size]
 
     def build_queries(self, year: int, category: str) -> list[str]:
         templates = {
