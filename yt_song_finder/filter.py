@@ -15,6 +15,12 @@ _TITLE_REJECT = re.compile(
     re.IGNORECASE
 )
 
+_TRACKLIST_LINE = re.compile(r"(?m)^\s*\d{1,2}:\d{2}(?::\d{2})?\s+[-–—]?\s*\S")
+
 class VideoFilter:
     def is_title_allowed(self, title: str) -> bool:
         return not bool(_TITLE_REJECT.search(title))
+
+    def has_tracklist(self, description: str) -> bool:
+        matches = _TRACKLIST_LINE.findall(description or "")
+        return len(matches) >= 2
