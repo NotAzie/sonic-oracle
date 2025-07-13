@@ -18,14 +18,44 @@ _R_DESC_CREDIT = re.compile(r"(?:music|song|track|audio|credit(?:s)?)[:\s]+([^\n
 class SongExtractor:
     def _infer_category(self, title: str, tags: list[str]) -> str:
         text = (title + " " + " ".join(tags or [])).lower()
-        if "amv" in text or "anime" in text:
-            return "amv"
-        if "slowed" in text or "reverb" in text:
-            return "slowed_reverb"
-        if "phonk" in text:
-            return "phonk"
-        if "gaming" in text or "montage" in text:
-            return "gaming_edit"
-        if "meme" in text:
-            return "meme"
+        if "amv" in text or "anime" in text: return "amv"
+        if "slowed" in text or "reverb" in text: return "slowed_reverb"
+        if "phonk" in text: return "phonk"
+        if "gaming" in text or "montage" in text: return "gaming_edit"
+        if "meme" in text: return "meme"
         return "general"
+
+    def extract(self, video: dict) -> ExtractedSong | None:
+        title = video.get("title", "")
+        desc = video.get("description", "")
+        tags = video.get("tags", [])
+
+        cat = self._infer_category(title, tags)
+
+        # 1. Title dash pattern
+        m = _R_ARTIST_SONG.match(title.strip())
+        if m:
+            return ExtractedSong(
+                song_name=m.group(2).strip(),
+                artist=m.group(1).strip(),
+                confidence=0.88,
+                source="title_pattern",
+                category=cat
+            )
+
+        # 2. Description credit
+        dm = _R_DESC_CREDIT.search(desc or "")
+        if dm:
+            line = dm.group(1).strip()
+            dash = _R_ARTIST_SONG.match(line)
+            if dash:
+                return ExtractedSong(
+                    song_name=dash.group(2).strip(),
+                    artist=dash.group(1).strip(),
+                    confidence=0.72,
+                    source="desc_credit",
+                    category=cat
+                )
+            return ExtractedSong(song_name=line, artist="Unknown", confidence=0.55, source="desc_raw", category=cat)
+
+        return None
