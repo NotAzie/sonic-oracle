@@ -18,5 +18,21 @@ _R_VARIANT_SUFFIX = re.compile(
     re.IGNORECASE,
 )
 
-def strip_variant_noise(text: str) -> str:
-    return _R_VARIANT_SUFFIX.sub("", text).strip()
+def _title_case(s: str) -> str:
+    small = {"a", "an", "the", "and", "but", "or", "for", "nor", "on", "at", "to", "by", "in", "of", "up"}
+    words = s.split()
+    res = []
+    for i, w in enumerate(words):
+        if i == 0 or w.lower() not in small:
+            res.append(w.capitalize())
+        else:
+            res.append(w.lower())
+    return " ".join(res)
+
+def normalise_song(song: str) -> str:
+    s = _R_VARIANT_SUFFIX.sub("", song).strip(" -–—()|[]")
+    return _title_case(s)
+
+def normalise_artist(artist: str) -> str:
+    a = _R_VARIANT_SUFFIX.sub("", artist).strip(" -–—()|[]")
+    return _title_case(a)
