@@ -1,8 +1,15 @@
 """
 deduplicator.py - Merges song variants into canonical track entries.
 """
+from difflib import SequenceMatcher
 from dataclasses import dataclass, field
 from .extractor import ExtractedSong
+
+SONG_SIM_THRESHOLD = 0.82
+ARTIST_SIM_THRESHOLD = 0.70
+
+def sim(a: str, b: str) -> float:
+    return SequenceMatcher(None, a, b).ratio()
 
 @dataclass
 class CanonicalTrack:
@@ -28,4 +35,6 @@ class VideoEvidence:
     song: ExtractedSong
 
 class SongDeduplicator:
-    pass
+    def __init__(self, sim_song: float = SONG_SIM_THRESHOLD, sim_artist: float = ARTIST_SIM_THRESHOLD):
+        self._sim_song = sim_song
+        self._sim_artist = sim_artist
