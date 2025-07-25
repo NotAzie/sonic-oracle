@@ -36,3 +36,12 @@ class ResultExporter:
                     for row in results[yr]:
                         w.writerow([yr, row["rank"], row["song_name"], row["artist"], row["category"], row["score"], row["appearances"], row["channel_count"], row["total_views"]])
             print(f"   ↳ CSV   → {p}")
+        if fmt in ("all", "txt"):
+            p = self.out / f"yt_songs_{ts}.txt"
+            lines = ["YEARLY VIRAL TRACKS REPORT", "=========================="]
+            for yr in sorted(results):
+                lines.append(f"\n--- {yr} ---")
+                for row in results[yr]:
+                    lines.append(f"#{row['rank']:<2} {row['song_name']} - {row['artist']} [Score: {row['score']}]")
+            p.write_text("\n".join(lines), encoding="utf-8")
+            print(f"   ↳ TXT   → {p}")
