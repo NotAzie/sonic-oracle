@@ -9,15 +9,11 @@ from yt_song_finder.config import Config
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s")
 
-def main():
-    p = argparse.ArgumentParser(description="YouTube Song Fame Finder v2")
-    p.add_argument("--start-year", type=int)
-    p.add_argument("--end-year", type=int)
-    p.add_argument("--categories", type=str)
-    p.add_argument("--api-key", type=str)
-    p.add_argument("--output", type=str, default="all", choices=["json", "csv", "txt", "all"])
-    args = p.parse_args()
-    print(args)
-
-if __name__ == "__main__":
-    main()
+def check_api_key(config: Config) -> str:
+    if not config.api_key:
+        print("\n[ERROR] No YouTube Data API key found.")
+        print("  Set it: export YOUTUBE_API_KEY='AIza...'")
+        print("  Or pass: --api-key 'AIza...'")
+        print("  Or run demo mode: python main.py --demo\n")
+        sys.exit(1)
+    return config.api_key
