@@ -50,3 +50,36 @@ DEMO_TRACKS: dict[int, list[dict]] = {
         {"song": "Industry Baby", "artist": "Lil Nas X & Jack Harlow", "cat": "shorts_viral", "apps": 79, "chs": 57, "months": 10},
     ]
 }
+
+def run_demo():
+    print("=" * 66)
+    print("  YouTube Song Fame Finder v2 - DEMO MODE (Offline)")
+    print("=" * 66)
+    config = Config()
+    scorer = SongScorer(config)
+    exporter = ResultExporter(config)
+    results = {}
+
+    for yr, track_seeds in DEMO_TRACKS.items():
+        tracks = []
+        for s in track_seeds:
+            tracks.append(CanonicalTrack(
+                song_name=s["song"],
+                artist=s["artist"],
+                category=s["cat"],
+                appearances=s["apps"],
+                channel_ids={f"ch_{i}" for i in range(s["chs"])},
+                view_counts=[100_000] * s["apps"],
+                months=list(range(1, s["months"] + 1)),
+                year=yr,
+                confidence=0.92,
+                raw_variants=[s["song"]],
+                source_ids=[f"v_{s['song'][:4]}"]
+            ))
+        ranked = scorer.rank(tracks, yr)
+        results[yr] = ranked
+        print(f"  Year {yr}: ranked {len(ranked)} viral tracks")
+
+    exporter.export(results, "all")
+    exporter.print_summary(results)
+    print("Demo completed successfully!")
