@@ -38,5 +38,15 @@ DEMO_TRACKS: dict[int, list[dict]] = {
         {"song": "Congratulations", "artist": "Post Malone", "cat": "amv", "apps": 68, "chs": 49, "months": 11},
         {"song": "Despacito", "artist": "Luis Fonsi", "cat": "meme", "apps": 79, "chs": 57, "months": 12},
         {"song": "Shape of You", "artist": "Ed Sheeran", "cat": "amv", "apps": 85, "chs": 61, "months": 12},
+    ],
+    2019: [
+        {"song": "Old Town Road", "artist": "Lil Nas X", "cat": "meme", "apps": 99, "chs": 75, "months": 12},
+        {"song": "Bad Guy", "artist": "Billie Eilish", "cat": "amv", "apps": 81, "chs": 58, "months": 11},
+        {"song": "Sunflower", "artist": "Post Malone & Swae Lee", "cat": "amv", "apps": 77, "chs": 55, "months": 11},
+    ],
+    2021: [
+        {"song": "Stay", "artist": "The Kid LAROI & Justin Bieber", "cat": "shorts_viral", "apps": 92, "chs": 68, "months": 12},
+        {"song": "Beggin", "artist": "Maneskin", "cat": "gaming_edit", "apps": 84, "chs": 61, "months": 11},
+        {"song": "Industry Baby", "artist": "Lil Nas X & Jack Harlow", "cat": "shorts_viral", "apps": 79, "chs": 57, "months": 10},
     ]
 }
