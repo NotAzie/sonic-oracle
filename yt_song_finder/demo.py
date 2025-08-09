@@ -25,5 +25,18 @@ DEMO_TRACKS: dict[int, list[dict]] = {
         {"song": "Faded", "artist": "Alan Walker", "cat": "gaming_edit", "apps": 88, "chs": 63, "months": 12},
         {"song": "Levels", "artist": "Avicii", "cat": "edm_ncs", "apps": 69, "chs": 50, "months": 11},
         {"song": "Clarity", "artist": "Zedd ft. Foxes", "cat": "amv", "apps": 57, "chs": 41, "months": 10},
+    ],
+    2015: [
+        {"song": "Faded", "artist": "Alan Walker", "cat": "gaming_edit", "apps": 96, "chs": 70, "months": 12},
+        {"song": "Lean On", "artist": "Major Lazer", "cat": "gaming_edit", "apps": 78, "chs": 56, "months": 11},
+        {"song": "Uptown Funk", "artist": "Mark Ronson", "cat": "meme", "apps": 83, "chs": 60, "months": 12},
+        {"song": "Centuries", "artist": "Fall Out Boy", "cat": "gaming_edit", "apps": 71, "chs": 51, "months": 11},
+    ],
+    2017: [
+        {"song": "HUMBLE.", "artist": "Kendrick Lamar", "cat": "gaming_edit", "apps": 82, "chs": 59, "months": 11},
+        {"song": "XO Tour Llif3", "artist": "Lil Uzi Vert", "cat": "gaming_edit", "apps": 74, "chs": 53, "months": 11},
+        {"song": "Congratulations", "artist": "Post Malone", "cat": "amv", "apps": 68, "chs": 49, "months": 11},
+        {"song": "Despacito", "artist": "Luis Fonsi", "cat": "meme", "apps": 79, "chs": 57, "months": 12},
+        {"song": "Shape of You", "artist": "Ed Sheeran", "cat": "amv", "apps": 85, "chs": 61, "months": 12},
     ]
 }
