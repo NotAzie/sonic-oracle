@@ -2,7 +2,14 @@
 main.py - Entry point for YouTube Song Fame Finder v2.
 """
 import sys
+import io
 import argparse
+
+# Safe stdout UTF-8 wrapper for Windows cp1252
+if sys.platform.startswith("win"):
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 from yt_song_finder.config import Config
 from yt_song_finder.demo import run_demo
 
