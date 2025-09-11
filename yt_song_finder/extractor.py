@@ -31,16 +31,22 @@ class SongExtractor:
         tags = video.get("tags", [])
         cat = self._infer_category(title, tags)
 
-        # Handle titles with multiple dashes by taking first split
+        # 1. Title dash
         parts = re.split(r"\s+[-–—]\s+", title.strip())
         if len(parts) >= 2:
             artist = parts[0].strip()
-            song_part = parts[1].strip()
-            song_clean = re.sub(r"\s*[\(\[\|].*$", "", song_part).strip()
+            song_clean = re.sub(r"\s*[\(\[\|].*$", "", parts[1].strip()).strip()
             return ExtractedSong(song_name=song_clean, artist=artist, confidence=0.88, source="title_split", category=cat)
 
+        # 2. Description credit
         dm = _R_DESC_CREDIT.search(desc or "")
         if dm:
-            return ExtractedSong(song_name=dm.group(1).strip(), artist="Unknown", confidence=0.55, source="desc_credit", category=cat)
+            line = dm.group(1).strip()
+            desc_parts = re.split(r"\s+[-–—]\s+", line)
+            if len(desc_parts) >= 2:
+                artist = desc_parts[0].strip()
+                song_clean = re.sub(r"\s*[\(\[\|].*$", "", desc_parts[1].strip()).strip()
+                return ExtractedSong(song_name=song_clean, artist=artist, confidence=0.75, source="desc_credit", category=cat)
+            return ExtractedSong(song_name=line, artist="Unknown", confidence=0.55, source="desc_raw", category=cat)
 
         return None
