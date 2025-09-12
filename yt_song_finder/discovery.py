@@ -2,6 +2,7 @@
 discovery.py - Finds candidate single-song videos across categories.
 """
 import logging
+import threading
 from concurrent.futures import ThreadPoolExecutor
 from .config import Config
 from .cache import Cache
@@ -14,11 +15,14 @@ class VideoDiscovery:
         self.cache = cache or Cache(config.cache_dir)
         self.max_workers = max_workers
         self._executor = ThreadPoolExecutor(max_workers=max_workers)
+        self._semaphore = threading.Semaphore(max_workers)
 
     def fetch_details_concurrent(self, video_ids: list[str]):
-        """Fetch video details in parallel thread batches."""
         batches = [video_ids[i:i + 50] for i in range(0, len(video_ids), 50)]
-        futures = [self._executor.submit(self._fetch_batch, b) for b in batches]
+        futures = []
+        for b in batches:
+            with self._semaphore:
+                futures.append(self._executor.submit(self._fetch_batch, b))
         results = []
         for f in futures:
             results.extend(f.result())
