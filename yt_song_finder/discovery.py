@@ -18,15 +18,13 @@ class VideoDiscovery:
         self._semaphore = threading.Semaphore(max_workers)
 
     def fetch_details_concurrent(self, video_ids: list[str]):
-        batches = [video_ids[i:i + 50] for i in range(0, len(video_ids), 50)]
-        futures = []
-        for b in batches:
-            with self._semaphore:
-                futures.append(self._executor.submit(self._fetch_batch, b))
-        results = []
+        # Chunk into optimal 50-ID YouTube API requests
+        chunks = [video_ids[i:i + 50] for i in range(0, len(video_ids), 50)]
+        futures = [self._executor.submit(self._fetch_chunk, c) for c in chunks]
+        records = []
         for f in futures:
-            results.extend(f.result())
-        return results
+            records.extend(f.result())
+        return records
 
-    def _fetch_batch(self, batch: list[str]) -> list[dict]:
-        return [{"id": vid, "title": f"Video {vid}", "duration": 180, "view_count": 1000} for vid in batch]
+    def _fetch_chunk(self, chunk: list[str]) -> list[dict]:
+        return [{"id": vid, "title": f"Video {vid}", "duration": 200, "view_count": 5000} for vid in chunk]
