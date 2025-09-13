@@ -2,6 +2,7 @@
 quota.py - Rate limiting and YouTube API budget management.
 """
 import time
+import random
 import threading
 
 class TokenBucketRateLimiter:
@@ -23,3 +24,8 @@ class TokenBucketRateLimiter:
                 self.tokens -= tokens
                 return True
             return False
+
+def backoff_jitter(attempt: int, base: float = 1.0, max_backoff: float = 32.0) -> float:
+    """Full jitter exponential backoff."""
+    delay = min(max_backoff, base * (2 ** attempt))
+    return random.uniform(0, delay)
