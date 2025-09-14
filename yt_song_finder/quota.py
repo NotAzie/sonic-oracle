@@ -4,31 +4,23 @@ quota.py - Rate limiting and YouTube API budget management.
 import time
 import random
 import threading
+from .exceptions import YouTubeQuotaExceeded
 
-class TokenBucketRateLimiter:
-    def __init__(self, capacity: float = 10.0, refill_rate: float = 2.0):
-        self.capacity = capacity
-        self.refill_rate = refill_rate
-        self.tokens = capacity
-        self.last_update = time.time()
-        self._lock = threading.RLock()
+DAILY_QUOTA_LIMIT = 10000
 
-    def acquire(self, tokens: float = 1.0) -> bool:
+class QuotaBudgetManager:
+    def __init__(self, max_daily_units: int = DAILY_QUOTA_LIMIT):
+        self.max_daily_units = max_daily_units
+        self.units_consumed = 0
+        self._lock = threading.Lock()
+
+    def record_cost(self, units: int):
         with self._lock:
-            now = time.time()
-            elapsed = now - self.last_update
-            self.tokens = min(self.capacity, self.tokens + elapsed * self.refill_rate)
-            self.last_update = now
+            if self.units_consumed + units > self.max_daily_units:
+                raise YouTubeQuotaExceeded(f"Daily quota limit reached: {self.units_consumed}/{self.max_daily_units} units")
+            self.units_consumed += units
 
-            if self.tokens >= tokens:
-                self.tokens -= tokens
-                return True
-            return False
-
-    def wait_and_acquire(self, tokens: float = 1.0, timeout: float = 5.0):
-        start = time.time()
-        while time.time() - start < timeout:
-            if self.acquire(tokens):
-                return True
-            time.sleep(0.05)
-        return False
+    @property
+    def remaining_budget(self) -> int:
+        with self._lock:
+            return max(0, self.max_daily_units - self.units_consumed)
