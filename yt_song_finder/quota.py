@@ -7,6 +7,7 @@ import threading
 from .exceptions import YouTubeQuotaExceeded
 
 DAILY_QUOTA_LIMIT = 10000
+SAFETY_MARGIN = 200
 
 COST_SEARCH = 100
 COST_VIDEOS_LIST = 1
@@ -25,8 +26,8 @@ class QuotaBudgetManager:
 
     def record_cost(self, units: int):
         with self._lock:
-            if self.units_consumed + units > self.max_daily_units:
-                raise YouTubeQuotaExceeded(f"Daily quota limit reached: {self.units_consumed}/{self.max_daily_units} units")
+            if self.units_consumed + units > (self.max_daily_units - SAFETY_MARGIN):
+                raise YouTubeQuotaExceeded(f"Approaching daily quota safety limit: {self.units_consumed}/{self.max_daily_units} units")
             self.units_consumed += units
 
     @property
