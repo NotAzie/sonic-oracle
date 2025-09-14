@@ -34,3 +34,8 @@ class QuotaBudgetManager:
     def remaining_budget(self) -> int:
         with self._lock:
             return max(0, self.max_daily_units - self.units_consumed)
+
+    def print_telemetry(self):
+        with self._lock:
+            pct = (self.units_consumed / self.max_daily_units) * 100
+            print(f"[Quota Telemetry] Consumed: {self.units_consumed}/{self.max_daily_units} units ({pct:.1f}%) | Remaining: {self.remaining_budget}")
