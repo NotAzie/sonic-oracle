@@ -4,39 +4,66 @@ cache.py - Dual-tier caching architecture (L1 Memory LRU + L2 SQLite/Disk).
 import json
 import sqlite3
 import hashlib
+import threading
 from pathlib import Path
 from typing import Any
 from collections import OrderedDict
 
-class SQLiteCache:
-    def __init__(self, db_path: Path):
-        self.db_path = db_path
-        self._init_db()
-
-    def _init_db(self):
-        with sqlite3.connect(self.db_path) as conn:
-            conn.execute("PRAGMA journal_mode=WAL;")
-            conn.execute("""
-                CREATE TABLE IF NOT EXISTS cache_entries (
-                    key TEXT PRIMARY KEY,
-                    value TEXT NOT NULL,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                );
-            """)
+class LRUMemoryCache:
+    def __init__(self, max_items: int = 1000):
+        self.max_items = max_items
+        self._cache: OrderedDict[str, Any] = OrderedDict()
+        self._lock = threading.Lock()
 
     def get(self, key: str) -> Any | None:
-        try:
-            with sqlite3.connect(self.db_path) as conn:
-                cur = conn.execute("SELECT value FROM cache_entries WHERE key = ?", (key,))
-                row = cur.fetchone()
-                return json.loads(row[0]) if row else None
-        except Exception:
-            return None
+        with self._lock:
+            if key not in self._cache:
+                return None
+            self._cache.move_to_end(key)
+            return self._cache[key]
 
     def set(self, key: str, value: Any) -> None:
+        with self._lock:
+            self._cache[key] = value
+            self._cache.move_to_end(key)
+            if len(self._cache) > self.max_items:
+                self._cache.popitem(last=False)
+
+class DualTierCache:
+    def __init__(self, cache_dir: Path, l1_size: int = 1000):
+        self.cache_dir = Path(cache_dir)
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
+        self.l1 = LRUMemoryCache(l1_size)
+        self.l2_db = self.cache_dir / "cache.sqlite3"
+        self._init_l2()
+
+    def _init_l2(self):
+        with sqlite3.connect(self.l2_db) as conn:
+            conn.execute("PRAGMA journal_mode=WAL;")
+            conn.execute("CREATE TABLE IF NOT EXISTS entries (k TEXT PRIMARY KEY, v TEXT);")
+
+    def get(self, key: str) -> Any | None:
+        v = self.l1.get(key)
+        if v is not None:
+            return v
         try:
-            val_str = json.dumps(value, ensure_ascii=False)
-            with sqlite3.connect(self.db_path) as conn:
-                conn.execute("INSERT OR REPLACE INTO cache_entries (key, value) VALUES (?, ?)", (key, val_str))
+            with sqlite3.connect(self.l2_db) as conn:
+                row = conn.execute("SELECT v FROM entries WHERE k = ?", (key,)).fetchone()
+                if row:
+                    val = json.loads(row[0])
+                    self.l1.set(key, val)
+                    return val
         except Exception:
             pass
+        return None
+
+    def set(self, key: str, value: Any) -> None:
+        self.l1.set(key, value)
+        try:
+            with sqlite3.connect(self.l2_db) as conn:
+                conn.execute("INSERT OR REPLACE INTO entries (k, v) VALUES (?, ?)", (key, json.dumps(value)))
+        except Exception:
+            pass
+
+# Backwards compatibility alias
+Cache = DualTierCache
