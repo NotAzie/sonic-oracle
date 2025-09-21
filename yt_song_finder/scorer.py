@@ -22,8 +22,9 @@ def gini_coefficient(quantities: list[int]) -> float:
     total = sum(s_q)
     return (2 * cumsum) / (n * total) - (n + 1) / n if total else 0.0
 
-def half_life_decay(months: list[int]) -> float:
-    """Estimates staying power half-life across active months."""
-    if not months: return 0.0
-    unique_span = max(months) - min(months) + 1
-    return min(1.0, unique_span / 12.0)
+def viral_velocity(monthly_counts: dict[int, int]) -> float:
+    """Computes month-over-month acceleration slope."""
+    if len(monthly_counts) < 2: return 0.0
+    sorted_m = sorted(monthly_counts.keys())
+    deltas = [monthly_counts[sorted_m[i]] - monthly_counts[sorted_m[i-1]] for i in range(1, len(sorted_m))]
+    return sum(deltas) / len(deltas)
