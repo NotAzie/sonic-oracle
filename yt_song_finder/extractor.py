@@ -12,12 +12,12 @@ class ExtractedSong:
     source: str
     category: str
 
-_R_ARTIST_SONG = re.compile(r"^(.{2,50}?)\s*[-–—]\s*(.{2,80}?)(?:\s*[\(\[\|].*)?$", re.IGNORECASE)
 _R_DESC_CREDIT = re.compile(r"(?:music|song|track|audio|credit(?:s)?)[:\s]+([^\n\r]{5,100})", re.IGNORECASE)
 
 class SongExtractor:
     def _infer_category(self, title: str, tags: list[str]) -> str:
-        text = (title + " " + " ".join(tags or [])).lower()
+        safe_tags = [t for t in tags if isinstance(t, str)] if tags else []
+        text = ((title or "") + " " + " ".join(safe_tags)).lower()
         if "amv" in text or "anime" in text: return "amv"
         if "slowed" in text or "reverb" in text: return "slowed_reverb"
         if "phonk" in text: return "phonk"
@@ -26,20 +26,23 @@ class SongExtractor:
         return "general"
 
     def extract(self, video: dict) -> ExtractedSong | None:
-        title = video.get("title", "")
-        desc = video.get("description", "")
-        tags = video.get("tags", [])
+        title = (video.get("title") or "").strip()
+        desc = (video.get("description") or "").strip()
+        tags = video.get("tags") or []
         cat = self._infer_category(title, tags)
 
-        # 1. Title dash
-        parts = re.split(r"\s+[-–—]\s+", title.strip())
+        if not title:
+            return None
+
+        # 1. Title dash split
+        parts = re.split(r"\s+[-–—]\s+", title)
         if len(parts) >= 2:
             artist = parts[0].strip()
             song_clean = re.sub(r"\s*[\(\[\|].*$", "", parts[1].strip()).strip()
             return ExtractedSong(song_name=song_clean, artist=artist, confidence=0.88, source="title_split", category=cat)
 
         # 2. Description credit
-        dm = _R_DESC_CREDIT.search(desc or "")
+        dm = _R_DESC_CREDIT.search(desc)
         if dm:
             line = dm.group(1).strip()
             desc_parts = re.split(r"\s+[-–—]\s+", line)
