@@ -11,24 +11,11 @@ if sys.platform.startswith("win") and hasattr(sys.stdout, "reconfigure"):
 from yt_song_finder.config import Config
 from yt_song_finder.demo import run_demo
 
-def safe_run_year(year: int, config: Config):
-    try:
-        logging.info(f"Processing year {year}...")
-        return []
-    except Exception as e:
-        logging.error(f"Error processing year {year}: {e}", exc_info=True)
-        return []
-
-def main():
-    p = argparse.ArgumentParser(description="YouTube Song Fame Finder v2")
-    p.add_argument("--demo", action="store_true", help="Run with demo data")
-    p.add_argument("--start-year", type=int)
-    p.add_argument("--end-year", type=int)
-    args = p.parse_args()
-
-    if args.demo:
-        run_demo()
-        return
-
-if __name__ == "__main__":
-    main()
+def process_years(start_year: int, end_year: int, config: Config) -> dict:
+    results = {}
+    for yr in range(start_year, end_year + 1):
+        try:
+            results[yr] = []
+        except Exception as e:
+            logging.warning(f"Year {yr} failed but continuing pipeline: {e}")
+    return results
