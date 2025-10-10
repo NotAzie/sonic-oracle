@@ -24,5 +24,12 @@ class TestSongExtractor(unittest.TestCase):
         self.assertEqual(res.song_name, "Blinding Lights")
         self.assertEqual(res.category, "gaming_edit")
 
+    def test_tricky_hyphens_and_noise(self):
+        v = {"title": "Kordhell - Murder In My Mind [Phonk / Bass Boosted]", "description": ""}
+        res = self.extractor.extract(v)
+        self.assertIsNotNone(res)
+        self.assertEqual(res.artist, "Kordhell")
+        self.assertTrue("Murder" in res.song_name)
+
 if __name__ == "__main__":
     unittest.main()
