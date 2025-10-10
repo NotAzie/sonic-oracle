@@ -17,5 +17,9 @@ class TestVideoFilter(unittest.TestCase):
         self.assertTrue(self.vf.is_title_allowed("Alan Walker - Faded (Slowed + Reverb)"))
         self.assertTrue(self.vf.is_title_allowed("Kavinsky - Nightcall (AMV Edit)"))
 
+    def test_allow_song_with_word_top(self):
+        # A legitimate track whose title happens to contain "top"
+        self.assertTrue(self.vf.is_title_allowed("Imagine Dragons - On Top of the World"))
+
 if __name__ == "__main__":
     unittest.main()
