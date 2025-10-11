@@ -25,5 +25,11 @@ class TestSongDeduplicator(unittest.TestCase):
         self.assertEqual(tracks[0].appearances, 2)
         self.assertEqual(len(tracks[0].channel_ids), 2)
 
+    def test_distinct_songs_remain_separate(self):
+        ev1 = VideoEvidence("v1", "c1", 100, 1, 2020, ExtractedSong("Song A", "Artist X", 0.9, "t", "meme"))
+        ev2 = VideoEvidence("v2", "c2", 200, 2, 2020, ExtractedSong("Song B", "Artist Y", 0.9, "t", "meme"))
+        tracks = self.deduper.deduplicate([ev1, ev2])
+        self.assertEqual(len(tracks), 2)
+
 if __name__ == "__main__":
     unittest.main()
