@@ -14,5 +14,11 @@ class TestNormalizer(unittest.TestCase):
         self.assertEqual(normalise_for_matching("FADED (Slowed)"), "faded")
         self.assertEqual(normalise_for_matching("Alan Walker - Faded"), "alan walker faded")
 
+    def test_idempotence(self):
+        raw = "Never Gonna Give You Up (Slowed)"
+        once = normalise_song(raw)
+        twice = normalise_song(once)
+        self.assertEqual(once, twice)
+
 if __name__ == "__main__":
     unittest.main()
