@@ -1,17 +1,15 @@
 """
-deduplicator.py - Merges song variants into canonical track entries.
+deduplicator.py - High-Performance LSH Cluster Deduplication.
 """
 from collections import Counter
-from difflib import SequenceMatcher
 from dataclasses import dataclass, field
+from difflib import SequenceMatcher
 from .extractor import ExtractedSong
 from .normalizer import normalise_song, normalise_artist, normalise_for_matching
+from .lsh import MinHash, LSHIndex, get_k_shingles
 
 SONG_SIM_THRESHOLD = 0.82
 ARTIST_SIM_THRESHOLD = 0.70
-
-def sim(a: str, b: str) -> float:
-    return SequenceMatcher(None, a, b).ratio()
 
 @dataclass
 class CanonicalTrack:
@@ -42,28 +40,42 @@ class SongDeduplicator:
         self._sim_artist = sim_artist
 
     def deduplicate(self, evidence_list: list[VideoEvidence]) -> list[CanonicalTrack]:
+        if not evidence_list:
+            return []
+
         clusters: list[list[VideoEvidence]] = []
-        keys: list[tuple[str, str]] = []
+        cluster_keys: list[tuple[str, str, list[int]]] = []  # (norm_song, norm_artist, signature)
+        lsh = LSHIndex(bands=16, rows=4)
 
         for ev in evidence_list:
             ns = normalise_for_matching(ev.song.song_name)
             na = normalise_for_matching(ev.song.artist)
+            shingles = get_k_shingles(f"{ns}|{na}")
+            sig = MinHash.compute_signature(shingles)
 
-            best_idx = -1
-            best_score = 0.0
-            for idx, (ks, ka) in enumerate(keys):
-                s_sim = sim(ns, ks)
-                a_sim = sim(na, ka)
-                if s_sim >= self._sim_song and (na == "unknown" or ka == "unknown" or a_sim >= self._sim_artist):
-                    if s_sim > best_score:
-                        best_score = s_sim
-                        best_idx = idx
+            # Query LSH candidates in O(1)
+            candidate_ids = lsh.query(sig, threshold=0.75)
+            matched_idx = -1
 
-            if best_idx >= 0:
-                clusters[best_idx].append(ev)
+            if candidate_ids:
+                matched_idx = int(candidate_ids[0])
             else:
+                # Fallback SequenceMatcher verification
+                for idx, (ks, ka, _) in enumerate(cluster_keys):
+                    s_sim = SequenceMatcher(None, ns, ks).ratio()
+                    a_sim = SequenceMatcher(None, na, ka).ratio()
+                    if s_sim >= self._sim_song:
+                        if na == "unknown" or ka == "unknown" or a_sim >= self._sim_artist:
+                            matched_idx = idx
+                            break
+
+            if matched_idx >= 0:
+                clusters[matched_idx].append(ev)
+            else:
+                new_idx = len(clusters)
                 clusters.append([ev])
-                keys.append((ns, na))
+                cluster_keys.append((ns, na, sig))
+                lsh.insert(str(new_idx), sig)
 
         results = []
         for c in clusters:
