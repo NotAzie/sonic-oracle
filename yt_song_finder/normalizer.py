@@ -1,6 +1,7 @@
 """
 normalizer.py - Produces canonical (song, artist) pairs.
 """
+import sys
 import re
 import unicodedata
 
@@ -22,19 +23,9 @@ _R_VARIANT_SUFFIX = re.compile(
 _R_FEAT_INLINE = re.compile(r"\s+(?:feat(?:uring)?\.?|ft\.?)\s+.+$", re.IGNORECASE)
 _R_WHITESPACE = re.compile(r"\s{2,}")
 
-def fast_levenshtein(s1: str, s2: str) -> int:
-    """Single-row dynamic programming for minimum memory allocation."""
-    if len(s1) < len(s2):
-        s1, s2 = s2, s1
-    if not s2:
-        return len(s1)
-    prev = list(range(len(s2) + 1))
-    for i, c1 in enumerate(s1):
-        curr = [i + 1] + [0] * len(s2)
-        for j, c2 in enumerate(s2):
-            curr[j + 1] = prev[j] if c1 == c2 else 1 + min(prev[j + 1], curr[j], prev[j])
-        prev = curr
-    return prev[-1]
+def intern_token(token: str) -> str:
+    """Interns repeated category and tag tokens to reduce memory pressure."""
+    return sys.intern(token)
 
 def _title_case(s: str) -> str:
     small = {"a", "an", "the", "and", "but", "or", "for", "nor", "on", "at", "to", "by", "in", "of", "up"}
