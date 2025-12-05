@@ -1,25 +1,35 @@
 """
-models.py - Core domain entities and data transfer objects.
+models.py - Core domain entities and data transfer objects (Slots Optimized).
 """
 from dataclasses import dataclass, field
+from typing import Optional
 
-@dataclass
-class VideoMetadata:
-    id: str
-    title: str
-    description: str
+@dataclass(slots=True)
+class VideoRecord:
+    video_id: str
     channel_id: str
     channel_title: str
-    duration_sec: int
+    title: str
+    description: str
+    duration_seconds: int
     view_count: int
-    upload_year: int
-    upload_month: int
+    published_year: int
+    published_month: int
     tags: list[str] = field(default_factory=list)
+    category_id: str = ""
 
-@dataclass
-class ExtractedTrackRecord:
+@dataclass(slots=True)
+class ScoredTrackResult:
+    year: int
+    rank: int
     song_name: str
     artist: str
     category: str
+    score: float
     confidence: float
-    source: str
+    appearances: int
+    channel_count: int
+    total_views: int
+    active_months: int
+    raw_variants: list[str] = field(default_factory=list)
+    example_ids: list[str] = field(default_factory=list)
