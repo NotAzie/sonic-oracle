@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "yt-song-finder"
+version = "2.5.0"
+description = "YouTube Viral Song Fame Finder - Autonomous audio reuse intelligence engine"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+  { name = "NotAzie", email = "mazinullah317@gmail.com" }
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Topic :: Multimedia :: Sound/Audio :: Analysis",
+]
+
+[project.scripts]
+yt-song-finder = "main:main"
+yt-finder = "main:main"
