@@ -1,9 +1,11 @@
 # YouTube Song Fame Finder &bull; Enterprise Edition
 
 [![CI Matrix](https://github.com/NotAzie/yt-song-finder/actions/workflows/ci.yml/badge.svg)](https://github.com/NotAzie/yt-song-finder/actions)
+[![Release](https://img.shields.io/badge/release-v2.5.0--enterprise-blue.svg)](https://github.com/NotAzie/yt-song-finder/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-brightgreen.svg)](https://python.org)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+[![Architecture](https://img.shields.io/badge/architecture-MinHash%20LSH%20O(1)-purple.svg)](ARCHITECTURE.md)
 
 > **YouTube Song Fame Finder** is an autonomous cultural virality detection and audio reuse intelligence engine. It mines authentic underground music traction across creator edits, gaming montages, anime AMVs, phonk reels, and slowed+reverb tracks&mdash;surfacing the real sonic icons of internet culture.
 
@@ -27,18 +29,29 @@
 python main.py --demo
 ```
 
-### 2. Live YouTube Virality Mining
+### 2. Embedded REST API Server
+```bash
+python main.py --server --port 8080
+# Open http://localhost:8080/api/v1/demo
+```
+
+### 3. Live YouTube Virality Mining
 ```bash
 export YOUTUBE_API_KEY="AIzaSy..."
 python main.py --start-year 2015 --end-year 2021 --output all
 ```
 
-### 3. Run Test Suite
+### 4. Run Test Suite
 ```bash
 python -m unittest discover tests
 ```
 
-### 4. Run Algorithmic Benchmark Suite
+### 5. Run Algorithmic Benchmark Suite
 ```bash
 python benchmark.py
 ```
+
+---
+
+## License
+MIT License &copy; 2025 NotAzie
