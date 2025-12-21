@@ -44,7 +44,7 @@ class SongDeduplicator:
             return []
 
         clusters: list[list[VideoEvidence]] = []
-        cluster_keys: list[tuple[str, str, list[int]]] = []  # (norm_song, norm_artist, signature)
+        cluster_keys: list[tuple[str, str, list[int]]] = []
         lsh = LSHIndex(bands=16, rows=4)
 
         for ev in evidence_list:
@@ -53,19 +53,19 @@ class SongDeduplicator:
             shingles = get_k_shingles(f"{ns}|{na}")
             sig = MinHash.compute_signature(shingles)
 
-            # Query LSH candidates in O(1)
             candidate_ids = lsh.query(sig, threshold=0.75)
             matched_idx = -1
 
             if candidate_ids:
                 matched_idx = int(candidate_ids[0])
             else:
-                # Fallback SequenceMatcher verification
                 for idx, (ks, ka, _) in enumerate(cluster_keys):
                     s_sim = SequenceMatcher(None, ns, ks).ratio()
                     a_sim = SequenceMatcher(None, na, ka).ratio()
-                    if s_sim >= self._sim_song:
-                        if na == "unknown" or ka == "unknown" or a_sim >= self._sim_artist:
+                    # Stricter threshold for short titles (< 10 chars) to prevent false collisions
+                    req_threshold = 0.90 if len(ns) < 10 else self._sim_song
+                    if s_sim >= req_threshold:
+                        if (na == "unknown" or ka == "unknown") or a_sim >= self._sim_artist:
                             matched_idx = idx
                             break
 
