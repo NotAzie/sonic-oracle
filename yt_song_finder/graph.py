@@ -2,6 +2,7 @@
 graph.py - Memetic Propagation Hypergraph (MPH) & EigenVirality Diffusion.
 Models cultural audio propagation across bipartite creator-remix networks.
 """
+import math
 from dataclasses import dataclass, field
 from collections import defaultdict
 
@@ -35,3 +36,42 @@ class MemeticHypergraph:
         self.audio_to_creators[track_id].add(channel_id)
         self.creator_to_audios[channel_id].add(track_id)
         self.creators[channel_id].tracks_used.add(track_id)
+
+    def compute_eigen_virality(self, damping: float = 0.85, max_iter: int = 25, tol: float = 1e-5) -> dict[str, float]:
+        """
+        Computes dominant eigenvector across bipartite creator-audio Markov chain.
+        Quantifies true structural cultural influence rather than raw view count vanity.
+        """
+        if not self.audios:
+            return {}
+
+        n_audios = len(self.audios)
+        scores = {aid: 1.0 / n_audios for aid in self.audios}
+
+        for _ in range(max_iter):
+            new_scores = {aid: (1.0 - damping) / n_audios for aid in self.audios}
+
+            # Propagate from audios -> creators -> audios
+            creator_weights = defaultdict(float)
+            for aid, s in scores.items():
+                creators = self.audio_to_creators[aid]
+                if creators:
+                    share = s / len(creators)
+                    for cid in creators:
+                        creator_weights[cid] += share
+
+            for cid, w in creator_weights.items():
+                audios = self.creator_to_audios[cid]
+                if audios:
+                    share = (damping * w) / len(audios)
+                    for aid in audios:
+                        new_scores[aid] += share
+
+            # Normalize
+            total = sum(new_scores.values()) or 1.0
+            diff = sum(abs(new_scores[aid] - scores[aid]) for aid in self.audios)
+            scores = {aid: new_scores[aid] / total for aid in self.audios}
+            if diff < tol:
+                break
+
+        return scores
