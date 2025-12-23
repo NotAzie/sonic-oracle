@@ -25,3 +25,13 @@ class MemeticHypergraph:
         self.creators: dict[str, CreatorNode] = {}
         self.audio_to_creators: dict[str, set[str]] = defaultdict(set)
         self.creator_to_audios: dict[str, set[str]] = defaultdict(set)
+
+    def add_propagation_event(self, track_id: str, title: str, artist: str, channel_id: str):
+        if track_id not in self.audios:
+            self.audios[track_id] = AudioNode(track_id=track_id, title=title, artist=artist)
+        if channel_id not in self.creators:
+            self.creators[channel_id] = CreatorNode(channel_id=channel_id)
+
+        self.audio_to_creators[track_id].add(channel_id)
+        self.creator_to_audios[channel_id].add(track_id)
+        self.creators[channel_id].tracks_used.add(track_id)
