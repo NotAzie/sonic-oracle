@@ -1,27 +1,26 @@
 """
-cli.py - Rich Terminal User Interface and interactive visualizer.
+cli.py - Rich Terminal User Interface with SonicOracle Radar.
 """
 import sys
+from .core import Oracle
 
 def print_banner():
     banner = r"""
- __  ________   _____                _____ _           _
- \ \/ /_   _|  / ____|              |  ___(_)         | |
-  \  /  | |   | (___  ___  _ __  __ | |_   _ _ __   __| | ___ _ __
-  /  \  | |    \___ \/ _ \| '_ \/ _ \  _| | | '_ \ / _` |/ _ \ '__|
- / /\ \_| |_   ____) | (_) | | | \__ / |   | | | | | (_| |  __/ |
-/_/  \_\___/  |_____/ \___/|_| |_|___\_|   |_|_| |_|\__,_|\___|_|
+  ___  ___  _  _ ___ ___   ___  ___    _   ___ _    ___ 
+ / __|/ _ \| \| |_ _/ __| / _ \| _ \  /_\ / __| |  | __|
+ \__ \ (_) | .` || | (__ | (_) |   / / _ \ (__| |__| _| 
+ |___/\___/|_|\_|___\___| \___/|_|_\/_/ \_\___|____|___|
 
-  ENTERPRISE VIRAL INTELLIGENCE ENGINE  •  v2.5.0 "THE BEAST"
+  THE PARADIGM SHIFT  •  v3.0.0-QUANTUM  •  O(1) HDC RADAR
 """
     print(banner)
 
-def render_table(results: dict[int, list[dict]]):
-    print("\n" + "=" * 78)
-    print(f"{'RANK':<5} {'TRACK NAME':<32} {'ARTIST':<24} {'CATEGORY':<12} {'SCORE':<6}")
-    print("=" * 78)
-    for yr, tracks in sorted(results.items()):
-        print(f"\n--- [YEAR {yr}] ---")
-        for t in tracks[:10]:
-            print(f"#{t['rank']:<4} {t['song_name'][:30]:<32} {t['artist'][:22]:<24} {t['category']:<12} {t['score']:.4f}")
-    print("=" * 78 + "\n")
+def render_oracle_table(year: int = 2025):
+    oracle = Oracle()
+    records = oracle.forecast(year)
+    print("\n" + "=" * 82)
+    print(f" {'TRACK':<28} {'ARTIST':<20} {'R₀ GAUGE':<10} {'STATUS':<14} {'DNA HASH':<8}")
+    print("=" * 82)
+    for r in records:
+        print(f" {r.song_name[:26]:<28} {r.artist[:18]:<20} {r.r0:<10.2f} {r.status:<14} {r.acoustic_dna_hash}")
+    print("=" * 82 + "\n")
