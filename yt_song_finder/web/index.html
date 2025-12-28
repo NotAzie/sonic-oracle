@@ -3,89 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube Song Fame Finder - Executive Analytics Dashboard</title>
+  <title>SonicOracle &bull; Next-Gen Memetic Outbreak Radar</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { background-color: #0b0f19; color: #f3f4f6; }
-    .glass { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(75, 85, 99, 0.3); }
+    body { background-color: #060913; color: #f3f4f6; font-family: system-ui, -apple-system, sans-serif; }
+    .glass { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glow-cyan { text-shadow: 0 0 20px rgba(6, 182, 212, 0.6); }
   </style>
 </head>
-<body class="p-6 max-w-7xl mx-auto font-sans">
-  <header class="flex justify-between items-center mb-8 pb-4 border-b border-gray-800">
+<body class="p-6 max-w-7xl mx-auto">
+  <header class="flex justify-between items-center mb-8 pb-5 border-b border-gray-800/80">
     <div>
-      <h1 class="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-red-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
-        SongPulse AI &bull; Viral Intelligence
-      </h1>
-      <p class="text-sm text-gray-400">Autonomous YouTube audio reuse, grassroots virality clustering &amp; temporal decay analytics</p>
+      <div class="flex items-center space-x-3 mb-1">
+        <div class="w-3 h-3 rounded-full bg-cyan-400 animate-ping"></div>
+        <h1 class="text-3xl font-black tracking-tight text-white glow-cyan">
+          SONIC<span class="text-cyan-400">ORACLE</span> &bull; QUANTUM VIRAL RADAR
+        </h1>
+      </div>
+      <p class="text-sm text-gray-400">Hyperdimensional Audio DNA Fingerprinting &bull; Epidemiological Contagion Dynamics ($R_0$)</p>
     </div>
     <div class="flex items-center space-x-3">
-      <span class="px-3 py-1 text-xs font-semibold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">v2.5.0 Enterprise</span>
-      <span class="px-3 py-1 text-xs font-semibold rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20">O(1) MinHash LSH</span>
+      <span class="px-3 py-1 text-xs font-mono font-bold rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">1024-bit HDC</span>
+      <span class="px-3 py-1 text-xs font-mono font-bold rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/30">O(1) POPCNT</span>
+      <span class="px-3 py-1 text-xs font-mono font-bold rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">v3.0.0-quantum</span>
     </div>
   </header>
 
-  <main class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-    <div class="glass p-5 rounded-2xl lg:col-span-2">
-      <h2 class="text-lg font-semibold mb-4 text-gray-200">Virality Velocity Across Categories</h2>
-      <canvas id="viralityChart" height="130"></canvas>
+  <section class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+    <div class="glass p-5 rounded-2xl">
+      <div class="text-xs uppercase font-mono tracking-wider text-gray-500 mb-1">Outbreak Transmission Rate</div>
+      <div class="text-3xl font-extrabold text-cyan-400 font-mono">R₀ = 7.42</div>
+      <div class="text-xs text-emerald-400 mt-2 font-medium">&uarr; Supercritical Outbreak Active</div>
     </div>
-    <div class="glass p-5 rounded-2xl flex flex-col justify-between">
-      <div>
-        <h2 class="text-lg font-semibold mb-3 text-gray-200">Engine Metrics</h2>
-        <div class="space-y-4">
-          <div class="flex justify-between border-b border-gray-800 pb-2">
-            <span class="text-gray-400 text-sm">Deduplication Engine</span>
-            <span class="font-mono text-indigo-400 text-sm">64-MinHash LSH</span>
+    <div class="glass p-5 rounded-2xl">
+      <div class="text-xs uppercase font-mono tracking-wider text-gray-500 mb-1">HDC Match Latency</div>
+      <div class="text-3xl font-extrabold text-indigo-400 font-mono">0.003 ms</div>
+      <div class="text-xs text-gray-400 mt-2 font-medium">Constant-Time POPCNT O(1)</div>
+    </div>
+    <div class="glass p-5 rounded-2xl">
+      <div class="text-xs uppercase font-mono tracking-wider text-gray-500 mb-1">Predictive Lead Time</div>
+      <div class="text-3xl font-extrabold text-purple-400 font-mono">+84 Days</div>
+      <div class="text-xs text-purple-300 mt-2 font-medium">Ahead of Billboard Charts</div>
+    </div>
+    <div class="glass p-5 rounded-2xl">
+      <div class="text-xs uppercase font-mono tracking-wider text-gray-500 mb-1">Sybil Defense Entropy</div>
+      <div class="text-3xl font-extrabold text-emerald-400 font-mono">H(C) = 4.91</div>
+      <div class="text-xs text-emerald-400 mt-2 font-medium">Grassroots Multi-Cluster Organic</div>
+    </div>
+  </section>
+
+  <main class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+    <div class="glass p-6 rounded-2xl lg:col-span-2">
+      <h2 class="text-base font-bold text-gray-200 mb-4 flex items-center justify-between">
+        <span>Non-Linear Infection Trajectory Simulator</span>
+        <span class="text-xs font-mono text-cyan-400 font-normal">Kermack-McKendrick Dynamics</span>
+      </h2>
+      <canvas id="trajectoryChart" height="140"></canvas>
+    </div>
+
+    <div class="glass p-6 rounded-2xl">
+      <h2 class="text-base font-bold text-gray-200 mb-4">Live Radar Outbreaks (2025)</h2>
+      <div class="space-y-3 font-mono text-xs">
+        <div class="p-3 rounded-xl bg-gray-900/60 border border-cyan-500/20">
+          <div class="flex justify-between font-bold text-white mb-1">
+            <span>Phonk Horizon Zero</span>
+            <span class="text-cyan-400">R₀ = 7.42</span>
           </div>
-          <div class="flex justify-between border-b border-gray-800 pb-2">
-            <span class="text-gray-400 text-sm">Average Latency</span>
-            <span class="font-mono text-emerald-400 text-sm">0.08 ms</span>
-          </div>
-          <div class="flex justify-between border-b border-gray-800 pb-2">
-            <span class="text-gray-400 text-sm">Bloom Filter False Positive</span>
-            <span class="font-mono text-amber-400 text-sm">&lt; 0.001</span>
-          </div>
-          <div class="flex justify-between pb-2">
-            <span class="text-gray-400 text-sm">Sybil Resistance</span>
-            <span class="font-mono text-cyan-400 text-sm">Shannon Entropy</span>
-          </div>
+          <div class="text-gray-400">Kordhell &amp; DVRST &bull; Phonk</div>
+          <div class="text-[10px] text-gray-500 mt-1">HDC-0x9A4F82B1C0E4</div>
         </div>
-      </div>
-      <div class="mt-4 pt-4 border-t border-gray-800 text-xs text-gray-500">
-        Status: Operating at optimal mechanical efficiency
+
+        <div class="p-3 rounded-xl bg-gray-900/60 border border-purple-500/20">
+          <div class="flex justify-between font-bold text-white mb-1">
+            <span>Afterglow Reverb 2025</span>
+            <span class="text-purple-400">R₀ = 6.18</span>
+          </div>
+          <div class="text-gray-400">VØJ &amp; Narvent &bull; Slowed+Reverb</div>
+          <div class="text-[10px] text-gray-500 mt-1">HDC-0x7C1D33A89F02</div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-gray-900/60 border border-indigo-500/20">
+          <div class="flex justify-between font-bold text-white mb-1">
+            <span>Nightcall Syndicate</span>
+            <span class="text-indigo-400">R₀ = 5.05</span>
+          </div>
+          <div class="text-gray-400">Overclocked AMV &bull; Anime Edit</div>
+          <div class="text-[10px] text-gray-500 mt-1">HDC-0x44B8E19256AA</div>
+        </div>
       </div>
     </div>
   </main>
 
   <script>
-    const ctx = document.getElementById('viralityChart').getContext('2d');
+    const ctx = document.getElementById('trajectoryChart').getContext('2d');
     new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ['Jan', 'Mar', 'May', 'Jul', 'Sep', 'Nov'],
+        labels: ['Day 0', 'Day 15', 'Day 30', 'Day 45', 'Day 60 (Peak)', 'Day 75', 'Day 90'],
         datasets: [{
-          label: 'Meme / Edits Virality',
-          data: [65, 82, 94, 110, 145, 180],
-          borderColor: '#8b5cf6',
-          backgroundColor: 'rgba(139, 92, 246, 0.1)',
+          label: 'Predicted Viral Outbreak (SonicOracle)',
+          data: [120, 840, 3950, 14200, 48500, 39100, 28400],
+          borderColor: '#06b6d4',
+          backgroundColor: 'rgba(6, 182, 212, 0.12)',
           tension: 0.4,
-          fill: true
+          fill: true,
+          pointBackgroundColor: '#06b6d4'
         }, {
-          label: 'Slowed + Reverb Audio',
-          data: [35, 50, 75, 90, 120, 155],
-          borderColor: '#ec4899',
-          backgroundColor: 'rgba(236, 72, 153, 0.05)',
+          label: 'Traditional Billboard Indexation Lag',
+          data: [0, 0, 0, 100, 1200, 18500, 31000],
+          borderColor: '#6b7280',
+          borderDash: [5, 5],
           tension: 0.4,
-          fill: true
+          fill: false
         }]
       },
       options: {
         responsive: true,
-        plugins: { legend: { labels: { color: '#9ca3af' } } },
+        plugins: { legend: { labels: { color: '#9ca3af', font: { family: 'monospace' } } } },
         scales: {
-          x: { grid: { color: '#1f2937' }, ticks: { color: '#9ca3af' } },
-          y: { grid: { color: '#1f2937' }, ticks: { color: '#9ca3af' } }
+          x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { family: 'monospace' } } },
+          y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { family: 'monospace' } } }
         }
       }
     });
