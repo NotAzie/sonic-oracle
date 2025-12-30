@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "yt-song-finder"
-version = "2.5.0"
-description = "YouTube Viral Song Fame Finder - Autonomous audio reuse intelligence engine"
+version = "3.0.0"
+description = "SonicOracle - Autonomous Memetic Outbreak Radar & Hyperdimensional Audio Intelligence"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -15,10 +15,11 @@ authors = [
 classifiers = [
   "Programming Language :: Python :: 3",
   "License :: OSI Approved :: MIT License",
-  "Operating System :: OS Independent",
+  "Topic :: Scientific/Engineering :: Information Analysis",
   "Topic :: Multimedia :: Sound/Audio :: Analysis",
 ]
 
 [project.scripts]
 yt-song-finder = "main:main"
-yt-finder = "main:main"
+sonic-oracle = "main:main"
+oracle = "main:main"
