@@ -1,6 +1,13 @@
 """
 conftest.py - Shared fixtures and mock generators for test suite.
 """
+import sys
+from pathlib import Path
+
+_src = Path(__file__).resolve().parent.parent / "src"
+if str(_src) not in sys.path:
+    sys.path.insert(0, str(_src))
+
 SAMPLE_SEARCH_RESPONSE = {
     "items": [
         {"id": {"videoId": "dQw4w9WgXcQ"}, "snippet": {"title": "Rick Astley - Never Gonna Give You Up"}},

@@ -1,0 +1,30 @@
+# Production Configuration - yt-song-finder / SonicOracle
+[general]
+app_name = "yt-song-finder"
+environment = "production"
+version = "1.0.0"
+
+[discovery]
+max_search_results = 200
+published_after_days = 180
+target_regions = ["GLOBAL"]
+
+[filtering]
+min_duration_seconds = 30
+max_duration_seconds = 600
+
+[deduplication]
+similarity_threshold = 0.88
+minhash_bands = 32
+minhash_rows = 4
+
+[epidemiology]
+carrying_capacity = 250000
+
+[valuation]
+annual_discount_rate = 0.085
+per_stream_royalty_usd = 0.0040
+
+[alerting]
+warning_r0_threshold = 2.75
+critical_r0_threshold = 4.5

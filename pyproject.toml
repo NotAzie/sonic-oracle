@@ -1,25 +1,40 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "yt-song-finder"
-version = "3.0.0"
-description = "SonicOracle - Autonomous Memetic Outbreak Radar & Hyperdimensional Audio Intelligence"
+version = "1.0.0"
+description = "Autonomous cultural music intelligence, acoustic DNA hyperdimensional computing, and epidemiological virality forecasting"
 readme = "README.md"
 requires-python = ">=3.10"
-license = "MIT"
 authors = [
-  { name = "NotAzie", email = "mazinullah317@gmail.com" }
+    { name = "NotAzie", email = "mazinullah317@gmail.com" }
 ]
+license = { text = "MIT" }
 classifiers = [
-  "Programming Language :: Python :: 3",
-  "License :: OSI Approved :: MIT License",
-  "Topic :: Scientific/Engineering :: Information Analysis",
-  "Topic :: Multimedia :: Sound/Audio :: Analysis",
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13"
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "ruff>=0.1.0"
 ]
 
 [project.scripts]
-yt-song-finder = "main:main"
-sonic-oracle = "main:main"
-oracle = "main:main"
+yt-song-finder = "yt_song_finder.cli:main"
+sonic-oracle = "yt_song_finder.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

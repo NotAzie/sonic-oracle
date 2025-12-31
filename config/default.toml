@@ -1,0 +1,34 @@
+# Default Configuration - yt-song-finder / SonicOracle
+[general]
+app_name = "yt-song-finder"
+environment = "development"
+version = "1.0.0"
+
+[discovery]
+max_search_results = 50
+published_after_days = 90
+target_regions = ["US", "GB", "DE", "JP", "BR"]
+
+[filtering]
+min_duration_seconds = 45
+max_duration_seconds = 420
+block_compilation_keywords = ["top 10", "tracklist", "compilation", "best of", "megamix"]
+
+[deduplication]
+similarity_threshold = 0.85
+minhash_bands = 16
+minhash_rows = 4
+
+[epidemiology]
+default_transmission_rate = 1.85
+default_recovery_rate = 0.45
+carrying_capacity = 50000
+
+[valuation]
+annual_discount_rate = 0.10
+per_stream_royalty_usd = 0.0038
+streams_per_social_adoption = 15000
+
+[alerting]
+warning_r0_threshold = 3.0
+critical_r0_threshold = 5.0
