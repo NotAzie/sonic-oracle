@@ -37,10 +37,10 @@ class MemeticHypergraph:
         self.creator_to_audios[channel_id].add(track_id)
         self.creators[channel_id].tracks_used.add(track_id)
 
-    def compute_eigen_virality(self, damping: float = 0.85, max_iter: int = 25, tol: float = 1e-5) -> dict[str, float]:
+    def compute_eigen_virality(self, damping: float = 0.85, max_iter: int = 30, tol: float = 1e-6) -> dict[str, float]:
         """
         Computes dominant eigenvector across bipartite creator-audio Markov chain.
-        Quantifies true structural cultural influence rather than raw view count vanity.
+        Applies network dispersion entropy to amplify authentic multi-creator grassroots virality.
         """
         if not self.audios:
             return {}
@@ -51,15 +51,18 @@ class MemeticHypergraph:
         for _ in range(max_iter):
             new_scores = {aid: (1.0 - damping) / n_audios for aid in self.audios}
 
-            # Propagate from audios -> creators -> audios
+            # Propagate from audios -> creators
             creator_weights = defaultdict(float)
             for aid, s in scores.items():
                 creators = self.audio_to_creators[aid]
                 if creators:
-                    share = s / len(creators)
+                    # Multi-creator dispersion bonus (Shannon dispersion)
+                    dispersion_mult = 1.0 + math.log1p(len(creators)) * 0.5
+                    share = (s * dispersion_mult) / len(creators)
                     for cid in creators:
                         creator_weights[cid] += share
 
+            # Propagate back from creators -> audios
             for cid, w in creator_weights.items():
                 audios = self.creator_to_audios[cid]
                 if audios:

@@ -4,12 +4,22 @@ Seamlessly routes legacy calls through next-gen SonicOracle & HDC HyperVectors.
 """
 from .config import Config
 from .core import Oracle
+from .discovery import VideoDiscovery
+from .filter import VideoFilter
+from .deduplicator import SongDeduplicator
+from .scorer import SongScorer
+from .bloom import BloomFilter
 
 class ViralSongEngine:
     """Quantum-accelerated facade maintaining backwards compatibility with O(1) performance."""
     def __init__(self, config: Config | None = None):
         self.config = config or Config()
         self.oracle = Oracle()
+        self.discovery = VideoDiscovery(self.config)
+        self.filter = VideoFilter()
+        self.deduplicator = SongDeduplicator()
+        self.scorer = SongScorer(self.config)
+        self.bloom = BloomFilter(capacity=200000)
 
     def run_year(self, year: int) -> list[dict]:
         records = self.oracle.forecast(year)

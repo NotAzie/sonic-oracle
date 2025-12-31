@@ -44,6 +44,11 @@ HISTORICAL_OUTBREAKS = {
     ]
 }
 
+_ACOUSTIC_NOISE = {
+    "slowed", "reverb", "nightcore", "sped", "up", "remix", "edit", "bass",
+    "boosted", "audio", "official", "8d", "ft", "feat", "featuring", "video", "lyrics"
+}
+
 class SonicOracle:
     def __init__(self):
         self.graph = MemeticHypergraph()
@@ -52,12 +57,10 @@ class SonicOracle:
 
     def extract_dna(self, track_title: str) -> HyperVector:
         tokens = re.findall(r"\b[a-zA-Z0-9]{2,}\b", track_title.lower())
-        noise = {"slowed", "reverb", "nightcore", "sped", "up", "remix", "edit", "bass", "boosted", "audio", "official"}
-        meaningful = [t for t in tokens if t not in noise] or tokens
+        meaningful = [t for t in tokens if t not in _ACOUSTIC_NOISE] or tokens
         return HyperVector.bundle([HyperVector.from_token(t) for t in meaningful])
 
     def forecast(self, year: int = 2025) -> list[ForecastRecord]:
-        """Predicts cultural outbreak trajectory 90 days ahead of mainstream indexation."""
         data = HISTORICAL_OUTBREAKS.get(year, HISTORICAL_OUTBREAKS[2025])
         results = []
         for song, artist, cat, r0, eigen, status in data:

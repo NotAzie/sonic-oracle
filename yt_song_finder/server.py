@@ -44,6 +44,9 @@ class SonicOracleRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+# Backwards compatibility alias
+SongFinderRequestHandler = SonicOracleRequestHandler
+
 def start_server(port: int = 8080):
     server = HTTPServer(("0.0.0.0", port), SonicOracleRequestHandler)
     print(f"SonicOracle Quantum server running on http://127.0.0.1:{port}")
