@@ -1,12 +1,17 @@
 """
 oracle.py - The SonicOracle Predictive Virality Radar.
-Unifies HyperVector Audio DNA, Memetic Hypergraphs, and Non-Linear Contagion Forecasting.
+Unifies HyperVector Audio DNA, Memetic Hypergraphs, Non-Linear Contagion Forecasting,
+Catalogue Financial Valuation, Spectral Signal Analysis, and Real-Time Outbreak Alerting.
 """
 import re
 from dataclasses import dataclass, field
+from typing import Optional, Iterable, Iterator, Any
 from .hypervector import HyperVector
 from .graph import MemeticHypergraph
 from .epidemiology import ViralContagionModel
+from .valuation import RoyaltyValuationEngine, ValuationReport
+from .signal import SpectralSignalProfiler, SpectralSignature
+from .alerting import AlertDispatcher, AlertSeverity, OutbreakEvent, AlertSink
 
 @dataclass
 class ForecastRecord:
@@ -50,10 +55,13 @@ _ACOUSTIC_NOISE = {
 }
 
 class SonicOracle:
-    def __init__(self):
+    def __init__(self) -> None:
         self.graph = MemeticHypergraph()
         self.dna_index: dict[str, HyperVector] = {}
         self.track_names: dict[str, tuple[str, str, str]] = {}
+        self.valuation_engine = RoyaltyValuationEngine()
+        self.signal_profiler = SpectralSignalProfiler()
+        self.alert_dispatcher = AlertDispatcher()
 
     def extract_dna(self, track_title: str) -> HyperVector:
         tokens = re.findall(r"\b[a-zA-Z0-9]{2,}\b", track_title.lower())
@@ -78,3 +86,22 @@ class SonicOracle:
             ))
         results.sort(key=lambda x: x.r0, reverse=True)
         return results
+
+    def evaluate_valuation(
+        self,
+        track_name: str,
+        artist: str,
+        r0: float,
+        time_to_peak: float = 2.4,
+        carrying_capacity: int = 50000
+    ) -> ValuationReport:
+        return self.valuation_engine.calculate_valuation(
+            track_name=track_name,
+            artist=artist,
+            r0=r0,
+            time_to_peak=time_to_peak,
+            carrying_capacity=carrying_capacity
+        )
+
+    def profile_signal(self, track_metadata: str) -> SpectralSignature:
+        return self.signal_profiler.decompose(track_metadata)

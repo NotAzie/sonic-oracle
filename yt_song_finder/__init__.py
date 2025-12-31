@@ -1,20 +1,33 @@
 """
-YouTube Song Fame Finder (yt_song_finder) / SonicOracle Quantum.
-An autonomous memetic outbreak radar & hyperdimensional cultural audio intelligence engine.
+yt_song_finder - High-Performance Cultural Music Intelligence & Virality Forecasting Engine.
 """
-
 from .core import Oracle
 from .hypervector import HyperVector
 from .graph import MemeticHypergraph
 from .epidemiology import ViralContagionModel
 from .oracle import SonicOracle, ForecastRecord
-from .config import Config
-
-__version__ = "3.0.0-quantum"
-__author__ = "NotAzie"
-__license__ = "MIT"
+from .valuation import RoyaltyValuationEngine, ValuationReport
+from .signal import SpectralSignalProfiler, SpectralSignature
+from .alerting import AlertDispatcher, AlertSeverity, OutbreakEvent, AlertSink, MemoryAlertSink
+from .batch import StreamBatchProcessor
 
 __all__ = [
-    "Oracle", "HyperVector", "MemeticHypergraph", "ViralContagionModel",
-    "SonicOracle", "ForecastRecord", "Config"
+    "Oracle",
+    "SonicOracle",
+    "HyperVector",
+    "MemeticHypergraph",
+    "ViralContagionModel",
+    "ForecastRecord",
+    "RoyaltyValuationEngine",
+    "ValuationReport",
+    "SpectralSignalProfiler",
+    "SpectralSignature",
+    "AlertDispatcher",
+    "AlertSeverity",
+    "OutbreakEvent",
+    "AlertSink",
+    "MemoryAlertSink",
+    "StreamBatchProcessor",
 ]
+
+__version__ = "1.0.0"
