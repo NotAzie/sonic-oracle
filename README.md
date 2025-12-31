@@ -94,7 +94,7 @@ The system is decoupled into five modular layers:
 ### Option 1: Editable Local Package Installation
 
 ```bash
-git clone https://github.com/NotAzie/yt-song-finder.git
+git clone https://github.com/NotAzie/sonic-oracle.git
 cd yt-song-finder
 pip install -e .
 ```

@@ -20,8 +20,10 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Run Tests
-        run: python -m unittest discover tests
+      - name: Install Package in Editable Mode
+        run: pip install -e .
+      - name: Run Automated Test Suite
+        run: python -m unittest discover tests -v
 
   security:
     runs-on: ubuntu-latest
@@ -30,4 +32,4 @@ jobs:
       - name: Security Scan
         run: |
           pip install bandit
-          bandit -r yt_song_finder/
+          bandit -r src/yt_song_finder/

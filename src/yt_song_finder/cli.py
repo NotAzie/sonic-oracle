@@ -58,12 +58,30 @@ def main() -> None:
     parser.add_argument("--server", action="store_true", help="Launch REST API microservice")
     parser.add_argument("--port", type=int, default=8080, help="Port for REST microservice")
     parser.add_argument("--demo", action="store_true", help="Run historical virality demo")
+    parser.add_argument("--dashboard", action="store_true", help="Launch interactive dashboard in web browser")
+
 
     args = parser.parse_args()
     print_banner()
 
     if args.server:
         start_server(args.port)
+        return
+
+    if args.dashboard:
+        import webbrowser
+        import threading
+        import time
+        server_thread = threading.Thread(target=lambda: start_server(args.port), daemon=True)
+        server_thread.start()
+        time.sleep(0.5)
+        webbrowser.open(f"http://localhost:{args.port}")
+        print(f"SonicOracle Dashboard active at http://localhost:{args.port} (Press Ctrl+C to terminate)")
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            print("\nDashboard session terminated.")
         return
 
     if args.valuation:
