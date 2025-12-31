@@ -1,6 +1,6 @@
 """
-YouTube Song Fame Finder (yt_song_finder)
-The Next-Gen Cultural Audio Virality & Memetic Outbreak Intelligence Engine.
+YouTube Song Fame Finder (yt_song_finder) / SonicOracle Quantum.
+An autonomous memetic outbreak radar & hyperdimensional cultural audio intelligence engine.
 """
 
 from .core import Oracle
