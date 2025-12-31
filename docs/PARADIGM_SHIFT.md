@@ -1,4 +1,4 @@
-# The Paradigm Shift Manifesto
+# Architecture Specification Manifesto
 
 Traditional music analytics rely on linear view counters and string matching.
 This is fundamentally flawed:

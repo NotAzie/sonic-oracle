@@ -1,4 +1,4 @@
-# Architecture V2 &bull; The Unfair Advantage
+# Architecture V2  The Unfair Advantage
 
 ```
 ┌──────────────────────────────────────────────┐

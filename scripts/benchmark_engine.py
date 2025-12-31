@@ -18,7 +18,7 @@ from yt_song_finder.normalizer import normalise_song, normalise_for_matching
 
 def benchmark_suite():
     print("=" * 66)
-    print("  YOUTUBE SONG FAME FINDER • BENCHMARK SUITE")
+    print("  YOUTUBE SONG FAME FINDER  BENCHMARK SUITE")
     print("=" * 66)
 
     # 1. Normalization

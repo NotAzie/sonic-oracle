@@ -16,7 +16,7 @@ from yt_song_finder import Oracle, HyperVector
 
 def run_benchmarks():
     print("=" * 70)
-    print("  NEXT-GEN QUANTUM BENCHMARK &bull; HYPERDIMENSIONAL COMPUTING (HDC)")
+    print("  NEXT-GEN QUANTUM BENCHMARK  HYPERDIMENSIONAL COMPUTING (HDC)")
     print("=" * 70)
 
     # 1. HyperVector Binding & Hamming POPCNT
